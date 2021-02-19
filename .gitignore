@@ -4,7 +4,6 @@
 _ReSharper.*/
 *.sdf
 bin/
-Databases/obj/
 Debug/
 Release/
 *.opensdf
@@ -13,4 +12,4 @@ Release/
 TestResult.xml
 *.VisualState.xml
 *.cache
-obj/
+/obj/
