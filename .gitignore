@@ -13,3 +13,4 @@ Release/
 TestResult.xml
 *.VisualState.xml
 *.cache
+obj/
