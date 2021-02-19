@@ -6,7 +6,17 @@ namespace DataControl
 {
     public class DB_Object
     {
-        public String ID { get; set; }
+        public int ID { get; set; }
+
+        public virtual String sql_Overwrite(String table)
+        {
+            return "";
+        }
+
+        public virtual String sql_Insert(String table)
+        {
+            return "";
+        }
 
         public virtual void debug()
         {

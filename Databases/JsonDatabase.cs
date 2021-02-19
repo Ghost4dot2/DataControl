@@ -1,5 +1,8 @@
-﻿using System;
+﻿using DataControl;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Databases
@@ -67,8 +70,8 @@ namespace Databases
                 string line;
                 while ((line = file.ReadLine()) != null)
                 {
-                    Customer customer = JsonConvert.DeserializeObject<Customer>(line);
-                    add(customer, false);
+                    //Employee customer = JsonConvert.DeserializeObject<Employee>(line);
+                    //add(customer, false);
                 }
                 file.Close();
             }
