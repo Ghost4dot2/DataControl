@@ -6,6 +6,9 @@ using System.Data.SqlClient;
 using System.Text;
 using System.Threading.Tasks;
 
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+
 namespace DataControl
 {
     class Program
@@ -14,28 +17,61 @@ namespace DataControl
         {
             SQLDatabase myDatabase = new SQLDatabase("localhost", "Northwind", "SA", "AStupidPassword1@");
             Dictionary<String, int> employeeNameID = await myDatabase.getNames("Employees");
-
+            await myDatabase.getEmployeeByID("8");
+            
+            
             foreach(KeyValuePair<String, int> entry in employeeNameID)
             {
                 Console.WriteLine($"The Emplyee name is {entry.Value} {entry.Key}");
             }
+            
 
             /*
-            await using var connection = new SqlConnection("data source=localhost; Database=Northwind; User ID=SA;Password=AStupidPassword1@");
-
-            await connection.OpenAsync();
-
-            //read from database
-            var query = connection.CreateCommand();
-            query.CommandText = "SELECT * FROM Employees";
-            query.CommandType = CommandType.Text;
-
-            await using (var reader = await query.ExecuteReaderAsync())
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
             {
-                while (await reader.ReadAsync())
+                channel.QueueDeclare(queue: "rpc_queue", durable: false,
+                  exclusive: false, autoDelete: false, arguments: null);
+                channel.BasicQos(0, 1, false);
+                var consumer = new EventingBasicConsumer(channel);
+                channel.BasicConsume(queue: "rpc_queue",
+                  autoAck: false, consumer: consumer);
+                Console.WriteLine(" [x] Awaiting RPC requests");
+
+                consumer.Received += (model, ea) =>
                 {
-                    Console.WriteLine($"The Emplyee name is {reader["FirstName"]} {reader["LastName"]}");
-                }
+                    string response = null;
+
+                    var body = ea.Body.ToArray();
+                    var props = ea.BasicProperties;
+                    var replyProps = channel.CreateBasicProperties();
+                    replyProps.CorrelationId = props.CorrelationId;
+
+                    try
+                    {
+                        var message = Encoding.UTF8.GetString(body);
+                        int n = int.Parse(message);
+                        Console.WriteLine(" [.] fib({0})", message);
+                        response = fib(n).ToString();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(" [.] " + e.Message);
+                        response = "";
+                    }
+                    finally
+                    {
+                        var responseBytes = Encoding.UTF8.GetBytes(response);
+                        channel.BasicPublish(exchange: "", routingKey: props.ReplyTo,
+                          basicProperties: replyProps, body: responseBytes);
+                        channel.BasicAck(deliveryTag: ea.DeliveryTag,
+                          multiple: false);
+                    }
+                };
+
+                Console.WriteLine(" Press [enter] to exit.");
+                Console.ReadLine();
             }
             */
 

@@ -7,6 +7,7 @@ using System.Text;
 
 namespace Databases
 {
+    /*
     class JsonDatabase : Database
     {
         public String name { get; }
@@ -96,4 +97,5 @@ namespace Databases
             }
         }
     }
+    */
 }

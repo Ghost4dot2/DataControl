@@ -61,10 +61,40 @@ namespace Databases
                 }
             }
 
+            await connection.CloseAsync();
+
             return employeeNameID;
         }
 
-         
+        public async Task<Employee> getEmployeeByID(string ID)
+        {
+            Employee identified = new Employee();
 
+            await using var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Northwind;User ID=SA;Password=AStupidPassword1@");
+
+            await connection.OpenAsync();
+
+            //read from database
+            var query = connection.CreateCommand();
+            query.CommandText = "SELECT * FROM " + "Employees WHERE EmployeeID=" + ID ;
+            query.CommandType = CommandType.Text;
+
+            await using (var reader = await query.ExecuteReaderAsync())
+            {
+                while (await reader.ReadAsync())
+                {
+
+                    identified.firstName = (String) reader["FirstName"];
+                    identified.lastName = (String) reader["LastName"];
+
+                    Console.WriteLine($"The Emplyee name is {identified.firstName} {identified.lastName}");
+                }
+            }
+
+            await connection.CloseAsync();
+
+
+            return identified;
+        }
     }
 }
