@@ -17,26 +17,26 @@ namespace DataControl
         public String extension { get; set; }
         public String notes { get; set; }
 
-        public override String sql_Overwrite(String table)
+        public override String sql_Update(String table)
         {
             return "UPDATE " + table + "\n" +
-                "SET LastName='" + lastName + "', FirstName = '" + firstName + "', Title= '" + title + "', TitleOfCourtesy = '" + titleOfCourtesy + "', Address = '" + address + "', City = '" + city + "', Region = '" + region + "', PostalCode = '" + postalCode + "', Country = '" + country + "', Phone = '" + phone + "', Extension = '" + extension + "', Notes = '" + notes + "'\n" +
+                "SET LastName='" + lastName + "', FirstName='" + firstName + "', Title= '" + title + "', TitleOfCourtesy = '" + titleOfCourtesy + "', Address = '" + address + "', City = '" + city + "', Region = '" + region + "', PostalCode = '" + postalCode + "', Country = '" + country + "', HomePhone = '" + phone + "', Extension = '" + extension + "', Notes = '" + notes + "'\n" +
                 "WHERE EmployeeID = " + ID + ";";
         }
 
         public override String sql_Insert(String table)
         {
-            return "INSERT INTO " + table + "(EmployeeID, LastName, FirstName, Title, TitleOfCourtesy, Address, City, Region, PostalCode, Country, HomePhone, Extension, Notes)\n" +
-                "VALUES (" + ID + ", '" + lastName + "', '" + firstName + "', '" + title + "', '" + titleOfCourtesy + "', '" + address + "', '" + city + "', '" + region + "', " + postalCode + ", '" + country + "', '" + phone + "', " + extension + ", '" +  notes + "');";
+            return "INSERT INTO " + table + "(LastName, FirstName, Title, TitleOfCourtesy, Address, City, Region, PostalCode, Country, HomePhone, Extension, Notes)\n" +
+                "VALUES ('" + lastName + "', '" + firstName + "', '" + title + "', '" + titleOfCourtesy + "', '" + address + "', '" + city + "', '" + region + "', " + postalCode + ", '" + country + "', '" + phone + "', " + extension + ", '" +  notes + "');";
         }
 
         public override void debug()
         {
+            string tempAddress = address.Replace("\r\n", " ");
+
             Console.WriteLine("ID: " + ID + "\n" +
                 "Name: " + title +" " + firstName + " " + " " + lastName + " (" + titleOfCourtesy + ")" + "\n" +
-                "Address: " + address + "\n" +
-                "\t" + city + ", " + postalCode + "\n" +
-                "\t" + country + ", " + region + "\n" +
+                "Address: " + tempAddress + ", " + city + " " + country + ", " + postalCode + ", " + region + "\n" +
                 "Phone: " + phone + "(" + extension + ")" + "\n"
                 );
         }

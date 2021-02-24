@@ -8,7 +8,7 @@ namespace DataControl
     {
         public String ID { get; set; }
 
-        public virtual String sql_Overwrite(String table)
+        public virtual String sql_Update(String table)
         {
             return "";
         }

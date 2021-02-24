@@ -16,11 +16,14 @@ namespace DataControl
         static async Task Main(string[] args)
         {
             SQLDatabase myDatabase = new SQLDatabase("localhost", "Northwind", "SA", "AStupidPassword1@");
+            
+            //Callahan
+            Employee temp = await myDatabase.getEmployeeByID("8");
+            await myDatabase.removeEmployeeByID("10");
+
+
             Dictionary<String, int> employeeNameID = await myDatabase.getNames("Employees");
-            await myDatabase.getEmployeeByID("8");
-            
-            
-            foreach(KeyValuePair<String, int> entry in employeeNameID)
+            foreach (KeyValuePair<String, int> entry in employeeNameID)
             {
                 Console.WriteLine($"The Emplyee name is {entry.Value} {entry.Key}");
             }

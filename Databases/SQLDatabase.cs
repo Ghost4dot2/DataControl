@@ -79,22 +79,92 @@ namespace Databases
             query.CommandText = "SELECT * FROM " + "Employees WHERE EmployeeID=" + ID ;
             query.CommandType = CommandType.Text;
 
-            await using (var reader = await query.ExecuteReaderAsync())
+            try
             {
-                while (await reader.ReadAsync())
+                await using (var reader = await query.ExecuteReaderAsync())
                 {
+                    while (await reader.ReadAsync())
+                    {
+                        
 
-                    identified.firstName = (String) reader["FirstName"];
-                    identified.lastName = (String) reader["LastName"];
+                        identified.ID = ((int)reader["EmployeeID"]).ToString();
+                        identified.firstName = (reader["FirstName"] as string) ?? "";
+                        identified.lastName = (reader["LastName"] as string) ?? "";
+                        identified.title = (reader["Title"] as string) ?? "";
+                        identified.titleOfCourtesy = (reader["TitleOfCourtesy"] as string) ?? "";
+                        identified.address = (reader["Address"] as string) ?? "";
+                        identified.city = (reader["City"] as string) ?? "";
+                        identified.region = (reader["Region"] as string) ?? "";
+                        identified.postalCode = (reader["PostalCode"] as string) ?? "";
+                        identified.country = (reader["Country"] as string) ?? "";
+                        identified.phone = (reader["HomePhone"] as string) ?? "";
+                        identified.extension = (reader["Extension"] as string) ?? "";
+                        identified.notes = (reader["Notes"] as string) ?? "";
 
-                    Console.WriteLine($"The Emplyee name is {identified.firstName} {identified.lastName}");
+                        identified.debug();
+                    }
                 }
             }
-
-            await connection.CloseAsync();
-
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine($"Failed to get employee with ID: {ID}");
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
 
             return identified;
+        }
+
+        public async Task addEmployee(Employee employee)
+        {
+
+            await excuteSQLCommand(employee.sql_Insert("Employees"), $"Failed to insert new Employee ({employee.ID}) into table: Employees");
+        }
+
+        public async Task updateEmployee(Employee employee)
+        {
+            await excuteSQLCommand(employee.sql_Update("Employees"), $"Failed to update Employee: {employee.ID}");
+        }
+
+        public async Task removeEmployeeByID(string ID)
+        {
+            await excuteSQLCommand($"DELETE FROM Employees WHERE EmployeeID={ID}", $"Failed to delete Employee: {ID} from table");
+        }
+
+        private async Task excuteSQLCommand(string commandString, string failureLog = "")
+        {
+            await using var connection = new SqlConnection(connString);
+
+            await connection.OpenAsync();
+            SqlCommand command = connection.CreateCommand();
+            command.CommandText = commandString;
+            command.CommandType = CommandType.Text;
+
+            try
+            {
+                command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                if(failureLog != "")
+                {
+                    Console.WriteLine(failureLog);
+                }
+                if(commandString != "")
+                {
+                    Console.WriteLine(commandString);
+                }
+                
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+
         }
     }
 }
