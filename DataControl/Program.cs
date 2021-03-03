@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Newtonsoft.Json;
 
 namespace DataControl
 {
@@ -22,8 +23,8 @@ namespace DataControl
             await myDatabase.removeEmployeeByID("10");
 
 
-            Dictionary<String, int> employeeNameID = await myDatabase.getNames("Employees");
-            foreach (KeyValuePair<String, int> entry in employeeNameID)
+            Dictionary<int, string> employeeNameID = await myDatabase.getNames("Employees");
+            foreach (KeyValuePair<int, string> entry in employeeNameID)
             {
                 Console.WriteLine($"The Emplyee name is {entry.Value} {entry.Key}");
             }
@@ -80,6 +81,63 @@ namespace DataControl
 
         }
         
+
+        public async Task<string> performAction(string action, SQLDatabase database )
+        {
+            string returnMessage = "";
+
+            string[] args = action.Split("#");
+
+            switch(args[0])
+            {
+                case "get":
+                    if(args[1] == "ID")
+                    {
+                        if(args.Length == 3)
+                        {
+                            Employee temp = await database.getEmployeeByID(args[2]);
+                            //translate to json for return to client
+                            string json = JsonConvert.SerializeObject(temp);
+                            returnMessage = "ID#" + json;
+                        }
+                        else
+                        {
+                            //error message for return to client
+                            returnMessage = "ID#Error";
+                        }
+
+                    }
+                    else if(args[1] == "Names")
+                    {
+                        Dictionary<int, string> temp = await database.getNames("Employees");
+                        //translate to json for return to client
+                        string json = JsonConvert.SerializeObject(temp);
+                        returnMessage = "Names#" + json;
+
+                    }
+                    break;
+                case "new":
+                    //2nd arg is the json for employee
+                    Employee newEmployee = JsonConvert.DeserializeObject<Employee>(args[1]);
+                    //add employee to database
+                    await database.addEmployee(newEmployee);
+                    returnMessage = "Recieved#New";
+                    break;
+                case "update":
+                    //2nd arg is the json for employee
+                    Employee updateEmployee = JsonConvert.DeserializeObject<Employee>(args[1]);
+                    //add employee to database
+                    await database.addEmployee(updateEmployee);
+                    returnMessage = "Recieved#Update";
+                    break;
+                default:
+                    returnMessage = "Error#Command";
+                    break;
+                
+            }
+
+            return returnMessage;
+        }
 
     }
 }

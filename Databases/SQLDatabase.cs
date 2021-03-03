@@ -35,11 +35,11 @@ namespace Databases
             throw new NotImplementedException();
         }
 
-        public async Task<Dictionary<String, int>> getNames(String Table)
+        public async Task<Dictionary<int, string>> getNames(String Table)
         {
             // String connString = "Data Source=" + dataSource + "; Initial Catalog=" + databaseName +
             //    ";User ID=" + username + ";Password=" + password;
-            Dictionary<String, int> employeeNameID = new Dictionary<string, int>();
+            Dictionary<int, string> employeeNameID = new Dictionary<int, string>();
 
             await using var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Northwind;User ID=SA;Password=AStupidPassword1@");
 
@@ -55,7 +55,7 @@ namespace Databases
                 while (await reader.ReadAsync())
                 {
                     string name = reader["FirstName"] + " " + reader["LastName"];
-                    employeeNameID.Add(name, (int) reader["EmployeeID"]);
+                    employeeNameID.Add((int) reader["EmployeeID"], name);
 
                     //Console.WriteLine($"The Emplyee name is {reader["FirstName"]} {reader["LastName"]}");
                 }
