@@ -17,7 +17,7 @@ namespace DataControl
         static async Task Main(string[] args)
         {
             SQLDatabase myDatabase = new SQLDatabase("localhost", "Northwind", "SA", "AStupidPassword1@");
-            
+            /*
             //Callahan
             Employee temp = await myDatabase.getEmployeeByID("8");
             await myDatabase.removeEmployeeByID("10");
@@ -28,7 +28,7 @@ namespace DataControl
             {
                 Console.WriteLine($"The Emplyee name is {entry.Value} {entry.Key}");
             }
-            
+            */
 
             /*
             var factory = new ConnectionFactory() { HostName = "localhost" };
