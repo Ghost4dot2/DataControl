@@ -30,17 +30,15 @@ namespace DataControl
             }
             */
 
-            /*
+            
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.QueueDeclare(queue: "rpc_queue", durable: false,
-                  exclusive: false, autoDelete: false, arguments: null);
+                channel.QueueDeclare(queue: "rpc_queue", durable: false, exclusive: false, autoDelete: false, arguments: null);
                 channel.BasicQos(0, 1, false);
                 var consumer = new EventingBasicConsumer(channel);
-                channel.BasicConsume(queue: "rpc_queue",
-                  autoAck: false, consumer: consumer);
+                channel.BasicConsume(queue: "rpc_queue", autoAck: false, consumer: consumer);
                 Console.WriteLine(" [x] Awaiting RPC requests");
 
                 consumer.Received += (model, ea) =>
@@ -56,8 +54,8 @@ namespace DataControl
                     {
                         var message = Encoding.UTF8.GetString(body);
                         int n = int.Parse(message);
-                        Console.WriteLine(" [.] fib({0})", message);
-                        response = fib(n).ToString();
+                        Console.WriteLine(" [.] double({0})", message);
+                        response = doubleValue(n).ToString();
                     }
                     catch (Exception e)
                     {
@@ -77,12 +75,17 @@ namespace DataControl
                 Console.WriteLine(" Press [enter] to exit.");
                 Console.ReadLine();
             }
-            */
+            
 
         }
-        
 
-        public async Task<string> performAction(string action, SQLDatabase database )
+
+        public static int doubleValue(int n)
+        {
+            return n * 2;
+        }
+
+        public static async Task<string> performAction(string action, SQLDatabase database )
         {
             string returnMessage = "";
 
