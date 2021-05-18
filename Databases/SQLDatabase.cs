@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -116,6 +117,59 @@ namespace Databases
             }
 
             return identified;
+        }
+
+        public async Task<List<Employee>> getEmployees()
+        {
+            List<Employee> list = new List<Employee>();
+
+            await using var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Northwind;User ID=SA;Password=AStupidPassword1@");
+
+            await connection.OpenAsync();
+
+            //read from database
+            var query = connection.CreateCommand();
+            query.CommandText = "SELECT * FROM " + "Employees";
+            query.CommandType = CommandType.Text;
+
+            try
+            {
+                await using (var reader = await query.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        Employee identified = new Employee();
+
+                        identified.ID = ((int)reader["EmployeeID"]).ToString();
+                        identified.firstName = (reader["FirstName"] as string) ?? "";
+                        identified.lastName = (reader["LastName"] as string) ?? "";
+                        identified.title = (reader["Title"] as string) ?? "";
+                        identified.titleOfCourtesy = (reader["TitleOfCourtesy"] as string) ?? "";
+                        identified.address = (reader["Address"] as string) ?? "";
+                        identified.city = (reader["City"] as string) ?? "";
+                        identified.region = (reader["Region"] as string) ?? "";
+                        identified.postalCode = (reader["PostalCode"] as string) ?? "";
+                        identified.country = (reader["Country"] as string) ?? "";
+                        identified.phone = (reader["HomePhone"] as string) ?? "";
+                        identified.extension = (reader["Extension"] as string) ?? "";
+                        identified.notes = (reader["Notes"] as string) ?? "";
+
+                        //identified.debug();
+                        list.Append(identified);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine($"Failed to get all employees");
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+
+            return list;
         }
 
         public async Task addEmployee(Employee employee)
