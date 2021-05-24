@@ -76,15 +76,15 @@ namespace DataControl
             {
                 case "Add":
                     addToDatabase(message, database);
-                    response = "Add Successful";
+                    response = "Received#Add";
                     break;
                 case "Remove":
                     removeFromDatabase(message, database);
-                    response = "Removed";
+                    response = "Received#Remove";
                     break;
                 case "Update":
                     updateDatabase(message, database);
-                    response = "Update Successful";
+                    response = "Received#Update";
                     break;
                 case "List":
                     response = "List#" + getListFromDatabase(database);
