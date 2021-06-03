@@ -41,8 +41,8 @@ namespace DataControl
                     {
                         var message = Encoding.UTF8.GetString(body);
                         Console.WriteLine(" [.] " + message);
-                        determineAction(message, myDatabase);
-                        response = "A response";
+                        //determineAction(message, myDatabase);
+                        response = determineAction(message, myDatabase);
                     }
                     catch (Exception e)
                     {
@@ -51,6 +51,7 @@ namespace DataControl
                     }
                     finally
                     {
+                        Console.WriteLine(" [*] " + response);
                         var responseBytes = Encoding.UTF8.GetBytes(response);
                         channel.BasicPublish(exchange: "", routingKey: props.ReplyTo,
                             basicProperties: replyProps, body: responseBytes);
@@ -95,37 +96,37 @@ namespace DataControl
             }
 
 
-            return "";
+            return response;
         }
 
-        private static async void addToDatabase(string employeeJson, SQLDatabase database)
+        private static void addToDatabase(string employeeJson, SQLDatabase database)
         {
             Employee newEmployee = JsonConvert.DeserializeObject<Employee>(employeeJson);
-            await database.addEmployee(newEmployee);
+            database.addEmployee(newEmployee);
         }
 
-        private static async void updateDatabase(string employeeJson, SQLDatabase database)
+        private static void updateDatabase(string employeeJson, SQLDatabase database)
         {
             Employee newEmployee = JsonConvert.DeserializeObject<Employee>(employeeJson);
-            await database.updateEmployee(newEmployee);
+            database.updateEmployee(newEmployee);
         }
 
-        private static async void removeFromDatabase(string id, SQLDatabase database)
+        private static void removeFromDatabase(string id, SQLDatabase database)
         {
-            await database.removeEmployeeByID(id);
+            database.removeEmployeeByID(id);
         }
 
-        private static async Task<string> getFromDatabase(string id, SQLDatabase database)
+        private static string getFromDatabase(string id, SQLDatabase database)
         {
-            Employee temp = await database.getEmployeeByID(id);
+            Employee temp = database.getEmployeeByID(id);
             string response = JsonConvert.SerializeObject(temp);
             return response;
         }
 
-        private static async Task<string> getListFromDatabase(SQLDatabase database)
+        private static string getListFromDatabase(SQLDatabase database)
         {
             string response = "";
-            List<Employee> employees = await database.getEmployees();
+            List<Employee> employees = database.getEmployees();
             response = JsonConvert.SerializeObject(employees);
             return response;
         }

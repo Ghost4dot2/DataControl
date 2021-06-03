@@ -185,11 +185,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\repos\\DataControl\\DataControl\\DatabaseObjects\\DatabaseObjects.csproj",
+      "projectUniqueName": "D:\\repos\\DataControl\\DatabaseObjects\\DatabaseObjects.csproj",
       "projectName": "DatabaseObjects",
-      "projectPath": "D:\\repos\\DataControl\\DataControl\\DatabaseObjects\\DatabaseObjects.csproj",
+      "projectPath": "D:\\repos\\DataControl\\DatabaseObjects\\DatabaseObjects.csproj",
       "packagesPath": "C:\\Users\\nate_\\.nuget\\packages\\",
-      "outputPath": "D:\\repos\\DataControl\\DataControl\\DatabaseObjects\\obj\\",
+      "outputPath": "D:\\repos\\DataControl\\DatabaseObjects\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\nate_\\AppData\\Roaming\\NuGet\\NuGet.Config",

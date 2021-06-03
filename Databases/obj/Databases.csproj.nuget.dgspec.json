@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\repos\\DataControl\\DataControl\\Databases\\Databases.csproj": {}
+    "D:\\repos\\DataControl\\Databases\\Databases.csproj": {}
   },
   "projects": {
-    "D:\\repos\\DataControl\\DataControl\\DatabaseObjects\\DatabaseObjects.csproj": {
+    "D:\\repos\\DataControl\\DatabaseObjects\\DatabaseObjects.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\repos\\DataControl\\DataControl\\DatabaseObjects\\DatabaseObjects.csproj",
+        "projectUniqueName": "D:\\repos\\DataControl\\DatabaseObjects\\DatabaseObjects.csproj",
         "projectName": "DatabaseObjects",
-        "projectPath": "D:\\repos\\DataControl\\DataControl\\DatabaseObjects\\DatabaseObjects.csproj",
+        "projectPath": "D:\\repos\\DataControl\\DatabaseObjects\\DatabaseObjects.csproj",
         "packagesPath": "C:\\Users\\nate_\\.nuget\\packages\\",
-        "outputPath": "D:\\repos\\DataControl\\DataControl\\DatabaseObjects\\obj\\",
+        "outputPath": "D:\\repos\\DataControl\\DatabaseObjects\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\nate_\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -61,14 +61,14 @@
         }
       }
     },
-    "D:\\repos\\DataControl\\DataControl\\Databases\\Databases.csproj": {
+    "D:\\repos\\DataControl\\Databases\\Databases.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\repos\\DataControl\\DataControl\\Databases\\Databases.csproj",
+        "projectUniqueName": "D:\\repos\\DataControl\\Databases\\Databases.csproj",
         "projectName": "Databases",
-        "projectPath": "D:\\repos\\DataControl\\DataControl\\Databases\\Databases.csproj",
+        "projectPath": "D:\\repos\\DataControl\\Databases\\Databases.csproj",
         "packagesPath": "C:\\Users\\nate_\\.nuget\\packages\\",
-        "outputPath": "D:\\repos\\DataControl\\DataControl\\Databases\\obj\\",
+        "outputPath": "D:\\repos\\DataControl\\Databases\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\nate_\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -85,8 +85,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "D:\\repos\\DataControl\\DataControl\\DatabaseObjects\\DatabaseObjects.csproj": {
-                "projectPath": "D:\\repos\\DataControl\\DataControl\\DatabaseObjects\\DatabaseObjects.csproj"
+              "D:\\repos\\DataControl\\DatabaseObjects\\DatabaseObjects.csproj": {
+                "projectPath": "D:\\repos\\DataControl\\DatabaseObjects\\DatabaseObjects.csproj"
               }
             }
           }

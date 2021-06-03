@@ -36,24 +36,24 @@ namespace Databases
             throw new NotImplementedException();
         }
 
-        public async Task<Dictionary<int, string>> getNames(String Table)
+        public Dictionary<int, string> getNames(String Table)
         {
             // String connString = "Data Source=" + dataSource + "; Initial Catalog=" + databaseName +
             //    ";User ID=" + username + ";Password=" + password;
             Dictionary<int, string> employeeNameID = new Dictionary<int, string>();
 
-            await using var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Northwind;User ID=SA;Password=AStupidPassword1@");
+            using var connection = new SqlConnection(connString);
 
-            await connection.OpenAsync();
+            connection.Open();
 
             //read from database
             var query = connection.CreateCommand();
             query.CommandText = "SELECT * FROM " + "Employees";
             query.CommandType = CommandType.Text;
 
-            await using (var reader = await query.ExecuteReaderAsync())
+            using (var reader = query.ExecuteReader())
             {
-                while (await reader.ReadAsync())
+                while (reader.Read())
                 {
                     string name = reader["FirstName"] + " " + reader["LastName"];
                     employeeNameID.Add((int) reader["EmployeeID"], name);
@@ -62,18 +62,18 @@ namespace Databases
                 }
             }
 
-            await connection.CloseAsync();
+            connection.Close();
 
             return employeeNameID;
         }
 
-        public async Task<Employee> getEmployeeByID(string ID)
+        public Employee getEmployeeByID(string ID)
         {
             Employee identified = new Employee();
 
-            await using var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Northwind;User ID=SA;Password=AStupidPassword1@");
+            using var connection = new SqlConnection(connString);
 
-            await connection.OpenAsync();
+            connection.Open();
 
             //read from database
             var query = connection.CreateCommand();
@@ -82,9 +82,9 @@ namespace Databases
 
             try
             {
-                await using (var reader = await query.ExecuteReaderAsync())
+                using (var reader = query.ExecuteReader())
                 {
-                    while (await reader.ReadAsync())
+                    while (reader.Read())
                     {
                         
 
@@ -113,19 +113,19 @@ namespace Databases
             }
             finally
             {
-                await connection.CloseAsync();
+                connection.Close();
             }
 
             return identified;
         }
 
-        public async Task<List<Employee>> getEmployees()
+        public List<Employee> getEmployees()
         {
             List<Employee> list = new List<Employee>();
 
-            await using var connection = new SqlConnection("Data Source=localhost;Initial Catalog=Northwind;User ID=SA;Password=AStupidPassword1@");
+            using var connection = new SqlConnection(connString);
 
-            await connection.OpenAsync();
+            connection.Open();
 
             //read from database
             var query = connection.CreateCommand();
@@ -134,9 +134,9 @@ namespace Databases
 
             try
             {
-                await using (var reader = await query.ExecuteReaderAsync())
+                using (var reader = query.ExecuteReader())
                 {
-                    while (await reader.ReadAsync())
+                    while (reader.Read())
                     {
                         Employee identified = new Employee();
 
@@ -155,7 +155,7 @@ namespace Databases
                         identified.notes = (reader["Notes"] as string) ?? "";
 
                         //identified.debug();
-                        list.Append(identified);
+                        list.Add(identified);
                     }
                 }
             }
@@ -166,33 +166,33 @@ namespace Databases
             }
             finally
             {
-                await connection.CloseAsync();
+                connection.Close();
             }
 
             return list;
         }
 
-        public async Task addEmployee(Employee employee)
+        public void addEmployee(Employee employee)
         {
 
-            await excuteSQLCommand(employee.sql_Insert("Employees"), $"Failed to insert new Employee ({employee.ID}) into table: Employees");
+            excuteSQLCommand(employee.sql_Insert("Employees"), $"Failed to insert new Employee ({employee.ID}) into table: Employees");
         }
 
-        public async Task updateEmployee(Employee employee)
+        public void updateEmployee(Employee employee)
         {
-            await excuteSQLCommand(employee.sql_Update("Employees"), $"Failed to update Employee: {employee.ID}");
+            excuteSQLCommand(employee.sql_Update("Employees"), $"Failed to update Employee: {employee.ID}");
         }
 
-        public async Task removeEmployeeByID(string ID)
+        public void removeEmployeeByID(string ID)
         {
-            await excuteSQLCommand($"DELETE FROM Employees WHERE EmployeeID={ID}", $"Failed to delete Employee: {ID} from table");
+            excuteSQLCommand($"DELETE FROM Employees WHERE EmployeeID={ID}", $"Failed to delete Employee: {ID} from table");
         }
 
-        private async Task excuteSQLCommand(string commandString, string failureLog = "")
+        private void excuteSQLCommand(string commandString, string failureLog = "")
         {
-            await using var connection = new SqlConnection(connString);
+            using var connection = new SqlConnection(connString);
 
-            await connection.OpenAsync();
+            connection.Open();
             SqlCommand command = connection.CreateCommand();
             command.CommandText = commandString;
             command.CommandType = CommandType.Text;
@@ -216,7 +216,7 @@ namespace Databases
             }
             finally
             {
-                await connection.CloseAsync();
+                connection.Close();
             }
 
         }

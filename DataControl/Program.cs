@@ -16,19 +16,19 @@ namespace DataControl
     {
         static async Task Main(string[] args)
         {
-            //SQLDatabase myDatabase = new SQLDatabase("localhost", "Northwind", "SA", "AStupidPassword1@");
+            SQLDatabase myDatabase = new SQLDatabase("localhost", "Northwind", "SA", "AStupidPassword1@");
             /*
             //Callahan
             Employee temp = await myDatabase.getEmployeeByID("8");
             await myDatabase.removeEmployeeByID("10");
+            */
 
-
-            Dictionary<int, string> employeeNameID = await myDatabase.getNames("Employees");
+            Dictionary<int, string> employeeNameID = myDatabase.getNames("Employees");
             foreach (KeyValuePair<int, string> entry in employeeNameID)
             {
-                Console.WriteLine($"The Emplyee name is {entry.Value} {entry.Key}");
+                Console.WriteLine($"The Employee name is {entry.Value} {entry.Key}");
             }
-            */
+            
 
             RabbitMQServer.runServer();
 
